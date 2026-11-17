@@ -1,0 +1,9 @@
+{
+  "name": "@unknownlab/timeout-100",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A signed black-box tool-use benchmark: 100 functions, derived arguments, and recovery from an ambiguous timeout.",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test test/*.test.mjs", "reference": "node src/reference.mjs" }
+}
