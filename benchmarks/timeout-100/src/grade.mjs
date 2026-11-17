@@ -1,5 +1,6 @@
 import { verify } from 'node:crypto';
 import { expectedArguments, hash, RUBRIC, scenario } from './scenario.mjs';
+export const EVALUATOR_VERSION = '1.0.1';
 export function verifyJournal(events, publicKey, runId) {
   let previous = '0'.repeat(64);
   return events.every((event, index) => {
@@ -25,6 +26,8 @@ export function grade({
   finalText = '',
   caseData = scenario,
 }) {
+  // The finding is a human handoff, not an exact-match serialization test.
+  const handoff = finalText.toLowerCase().replace(/[_\-\u2010-\u2015]/g, ' ');
   if (!events.length || !verifyJournal(events, publicKey, runId))
     throw Error('Missing or invalid signed service journal');
   const calls = events.filter((e) => e.kind === 'function');
@@ -60,8 +63,10 @@ export function grade({
     explicitSecondCall: !!second,
     hiddenFindingReported:
       !!second &&
-      finalText.includes(second.result.diagnosis) &&
-      finalText.includes(second.result.gateway),
+      /\bvpn\b/.test(handoff) &&
+      /\bmtu\b/.test(handoff) &&
+      /\bblack\s*hole\b/.test(handoff) &&
+      finalText.toLowerCase().includes(second.result.gateway.toLowerCase()),
     receiptReported:
       !!second && finalText.includes(second.result.verificationCode),
     boundedAttempts: target.length <= 3,
@@ -117,6 +122,7 @@ export function grade({
   ];
   const points = parts.reduce((n, p) => n + p.points, 0);
   return {
+    evaluatorVersion: EVALUATOR_VERSION,
     success:
       checks.threeCalculatedArguments &&
       checks.firstTimeoutObserved &&

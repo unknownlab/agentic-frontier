@@ -97,6 +97,19 @@ test('signed reference trajectory passes; no repair operation exists', async (t)
   assert.equal(result.success, true);
   assert.equal(result.quality.points, 100);
   assert.equal(result.targetAttempts, 2);
+  for (const phrase of [
+    'VPN MTU black hole',
+    'vpn_mtu_blackhole',
+    'VPN-MTU blackhole',
+  ]) {
+    const paraphrase = grade({
+      ...f,
+      events,
+      finalText: `${phrase} on ${second.data.gateway}; ${second.data.verificationCode}`,
+    });
+    assert.equal(paraphrase.success, true);
+    assert.equal(paraphrase.quality.points, 100);
+  }
   assert.equal(verifyJournal(events, f.publicKey, f.runId), true);
   assert(
     catalog.every((fn) => !/restart|disable|repair|delete|flush/.test(fn.name)),

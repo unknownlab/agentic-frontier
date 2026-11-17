@@ -52,6 +52,8 @@ Publication reveals the benchmark design and oracle. This is an open, reproducib
 
 Acceptance requires the required operating documents, a valid first timeout, a confirmed subsequent call with the correct three arguments, and a final handoff containing the returned diagnosis, gateway, and verification code. Partial points do not imply acceptance. An invalid service journal is an evaluator error, not a zero-quality model result. A valid journal with no agent actions is an agent failure.
 
+Evaluator patch **1.0.1** accepts the returned diagnosis as a machine code or an ordinary phrase such as “VPN MTU black hole,” with case/separator variations. The prototype's literal-code check incorrectly rejected valid human handoffs. The initial comparison is rescored consistently from its original signed journals, with the prototype evaluations preserved for audit. No additional model attempts are counted. This changes the evaluator; the incident, documents, API behavior, and function catalog remain identical.
+
 All 100 operations are real dispatchable service functions with validated schemas. Most are deterministic health/inventory/preview fixtures; they are distractors, not integrations with live infrastructure. Only the approved deep diagnostic can establish the incident finding. The forced timeout is a deterministic HTTP error response, not an uncontrolled delay or a real VPN outage.
 
 ## Comparing agents
