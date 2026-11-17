@@ -3,6 +3,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { deploy } from './host.mjs';
 import { agentPrompt } from './scenario.mjs';
+import { finalHandoff } from './final-handoff.mjs';
 const [container, commandJson, outputDir = 'results/local'] =
   process.argv.slice(2);
 if (!container || !commandJson) {
@@ -50,18 +51,7 @@ try {
       resolve({ code, timedOut, stdout, stderr });
     });
   });
-  // Native JSON CLIs can contain escaped text; decode their payloads as well as preserving raw evidence.
-  const decoded = execution.stdout
-    .split('\n')
-    .flatMap((line) => {
-      try {
-        return [JSON.stringify(JSON.parse(line))];
-      } catch {
-        return [line];
-      }
-    })
-    .join('\n');
-  const result = await d.inspect(decoded);
+  const result = await d.inspect(finalHandoff(execution.stdout));
   const dir = path.resolve(outputDir, d.runId);
   await fs.mkdir(dir, { recursive: true, mode: 0o700 });
   await fs.writeFile(

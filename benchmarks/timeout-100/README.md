@@ -24,11 +24,13 @@ For an already authenticated Codex container:
 
 ```sh
 node src/run-agent.mjs YOUR_CONTAINER \
-  '["codex","exec","--json","--sandbox","workspace-write","--","$PROMPT"]' \
+  '["codex","exec","--json","--skip-git-repo-check","--sandbox","workspace-write","--","$PROMPT"]' \
   results/local
 ```
 
 Arguments are passed as argv, without shell evaluation. Do not include tokens or credentials in the command. Other native CLIs can supply their own argv template. The four-minute native-agent budget and seven-minute fixture lifetime are fixed for this version. The host runner saves signed events, the public verification key, source hashes, image identity, and a result. It does not infer token usage or price from text; the Mastra adapter records native usage separately.
+
+Use JSON modes with a final assistant-message event (Codex/Pi-family events or a final `result`/`run_result.text`), or a CLI mode that outputs only its final answer as plain text. Structured tool responses and progress logs never count as a final handoff. The standalone runner rejects unsupported mixed output. Runner patch 0.1.2 adds a regression check for this boundary; the published Mastra comparison already used the adapters' final-answer text and is unchanged.
 
 The standalone runner terminates its Docker client on timeout; operators should also inspect and stop any agent processes their CLI leaves running. Mastra uses its native adapter's cancellation and workspace lock. Do not reuse a container concurrently across trials.
 
