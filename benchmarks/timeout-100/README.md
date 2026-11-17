@@ -77,3 +77,7 @@ Every run records SHA-256 hashes for the case, base prompt, function catalog, an
 Keep published result snapshots separate from live dashboards. A commit containing a result snapshot can link back to the benchmark source revision used for that run. A source permalink freezes code, not model-provider behavior, future subscription limits, or model outputs. Review result exports before publishing; never include native authentication stores or raw credential material.
 
 See [GitHub's permalink documentation](https://docs.github.com/en/repositories/working-with-files/using-files/getting-permanent-links-to-files). There is no “best agent” claim from this single-task comparison.
+
+## Initial measured results
+
+[Read the 19-setup comparison](results/README.md), or inspect the [signed, independently verifiable snapshot](results/first-comparison.json). All 19 measured setups passed this one task; this does not establish a general capability winner.
